@@ -34,6 +34,9 @@ async function getVerifierLogin(userId) {
   return data;
 }
 
+function returnPriority(){
+   return departmentPriority;
+}
 
 
 module.exports = {
@@ -42,4 +45,5 @@ module.exports = {
   getDeparmentPriority,
   getUserLogin,
   getVerifierLogin,
+  returnPriority
 };

@@ -3,6 +3,8 @@ const { addNewEmployee } = require('../services/dataInitiallizer');
 const {
   getVerifierLogin,
   getDeparmentPriority,
+  getAllDepartment,
+  returnPriority,
 } = require('../services/getData');
 const { generateToken, verifyToken } = require('../services/jwtServices');
 const {
@@ -11,7 +13,11 @@ const {
   getAllAccounts,
 } = require('../services/Web3Initializer');
 const router = express.Router();
-
+router.get('/getDepartmentDetails', async (req, res) => {
+  let dept = await getAllDepartment();
+  let priority = returnPriority();
+  res.send({ dept, priority });
+});
 router.post('/addEmployee', async (req, res) => {
   let data = req.body;
   console.log({ data });
@@ -105,10 +111,10 @@ router.get('/verifyProcess', async (req, res) => {
   let accessData = await API.methods.fetchAccess(Id).call();
   let fetchData = await API.methods.fetchDocument(Id).call();
   let isAccess = false;
-  console.log({ accessData });
+  console.log({ accessData: accessData.status });
   for (let i in accessData.approvalDept) {
     if (accessData.approvalDept[i][0] == verify.deptName) {
-      console.log();
+      console.log(verify.deptName);
 
       if (
         Number(accessData.currentPriority) <
@@ -121,6 +127,7 @@ router.get('/verifyProcess', async (req, res) => {
       }
     }
   }
+
   data = {
     ...accessData,
     ...fetchData,
@@ -144,7 +151,11 @@ router.post('/updateProcess', async (req, res) => {
 
   if (data.status.approvedStatus == true) {
     for (let i in accessData.approvalDept) {
-      if (accessData.approvalDept[i][0] !== verify.deptName) {
+      if (
+        accessData.approvalDept[i][0] !== verify.deptName &&
+        (accessData.approvalDept[i][0] != '' ||
+          accessData.approvalDept[i][1] > 0)
+      ) {
         minimumPriority =
           minimumPriority > accessData.approvalDept[i][1]
             ? accessData.approvalDept[i][1]
@@ -155,14 +166,16 @@ router.post('/updateProcess', async (req, res) => {
     minimumPriority = data.currentPriority;
   }
   console.log({ minimumPriority });
-  // let method = API.methods.updateProcessStatus(
-  //   data.status,
-  //   data.processId,
-  //   minimumPriority
-  // );
-  // let gas = await method.estimateGas({ from: verify.address });
-  // console.log({ gas });
-  // await method.send({ from: verify.address, gas });
+  data.status.approvalDept = verify.deptName;
+  console.log({ dept: data.status });
+  let method = API.methods.updateProcessStatus(
+    data.status,
+    data.processId,
+    minimumPriority
+  );
+  let gas = await method.estimateGas({ from: verify.address });
+  console.log({ gas });
+  await method.send({ from: verify.address, gas: gas });
 
   res.send('ss');
 });
