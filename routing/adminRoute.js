@@ -5,6 +5,8 @@ const {
   getDeparmentPriority,
   getAllDepartment,
   returnPriority,
+  returnDepartment,
+  getAllPriority,
 } = require('../services/getData');
 const { generateToken, verifyToken } = require('../services/jwtServices');
 const {
@@ -32,6 +34,7 @@ router.post('/addEmployee', async (req, res) => {
       Id,
       data.deptName,
       data.password,
+      data.isLead,
       account[accountCount]
     );
     if (status == false) {
@@ -73,7 +76,7 @@ router.post('/login', async (req, res) => {
   let temp = req.body;
   let data = await getVerifierLogin(temp.userId);
   let account = await returnAllAccounts();
-
+  console.log({ admin: data });
   if (data) {
     if (data.password == temp.password) {
       let address = temp.userId.split('A')[1];
@@ -83,6 +86,7 @@ router.post('/login', async (req, res) => {
       let tempData = {
         userId: temp.userId,
         deptName: data.deptName,
+        isLead: data.isLead,
         address,
       };
       console.log({ tempData });
@@ -91,6 +95,7 @@ router.post('/login', async (req, res) => {
         token: generateToken(tempData),
         userId: temp.userId,
         isAdmin: true,
+        isLead: data.isLead,
         role: data.deptName,
       });
     } else {
@@ -111,7 +116,7 @@ router.get('/verifyProcess', async (req, res) => {
   let accessData = await API.methods.fetchAccess(Id).call();
   let fetchData = await API.methods.fetchDocument(Id).call();
   let isAccess = false;
-  console.log({ accessData: accessData.status });
+  console.log({ accessData: accessData });
   for (let i in accessData.approvalDept) {
     if (accessData.approvalDept[i][0] == verify.deptName) {
       console.log(verify.deptName);
@@ -147,15 +152,18 @@ router.post('/updateProcess', async (req, res) => {
   data.status.transactedPerson = verify.address;
   let accessData = await API.methods.fetchAccess(data.processId).call();
   let minimumPriority = 99;
-  console.log(data.status.approvalStatus);
 
-  if (data.status.approvedStatus == true) {
+  if (data.status.approvedStatus == 'true') {
+    console.log('approved status true');
     for (let i in accessData.approvalDept) {
       if (
         accessData.approvalDept[i][0] !== verify.deptName &&
         (accessData.approvalDept[i][0] != '' ||
           accessData.approvalDept[i][1] > 0)
       ) {
+        console.log(
+          accessData.approvalDept[i][0] + '  ' + accessData.approvalDept[i][1]
+        );
         minimumPriority =
           minimumPriority > accessData.approvalDept[i][1]
             ? accessData.approvalDept[i][1]
@@ -175,9 +183,57 @@ router.post('/updateProcess', async (req, res) => {
   );
   let gas = await method.estimateGas({ from: verify.address });
   console.log({ gas });
-  await method.send({ from: verify.address, gas: gas });
+  // await method.send({ from: verify.address, gas: gas });
 
   res.send('ss');
 });
+router.post('/modifyPriority', async (req, res) => {
+  let data = req.body;
+  let header = req.headers.authorization;
+  let verify = verifyToken(header);
+  let dept = data.dept;
+  let priority = [];
+  priority = await API.methods.getAllPriority().call();
+  let allDepartment = await returnDepartment();
+  let index = allDepartment.indexOf(dept);
+  if (index != -1) {
+    let tempdata = [];
+    for (let i in priority) {
+      if (i == index) {
+        tempdata[i] = data.priority;
+      } else {
+        tempdata[i] = priority[i];
+      }
+    }
+    console.log(index + ' ' + data.priority);
+    console.log({ priority });
+    let method = API.methods.updatePriority(tempdata);
+    let gas = await method.estimateGas({ from: verify.address });
+    await method.send({ from: verify.address, gas: gas });
 
+    await getAllPriority(allDepartment);
+    res.send(true);
+  } else {
+    res.send(false);
+  }
+});
+
+router.post('/changePassword', async (req, res) => {
+  let data = req.body;
+  let header = req.headers.authorization;
+  let verify = verifyToken(header);
+  let method = API.methods.changePassword(
+    verify.userId,
+    data.password,
+    data.newPassword
+  );
+  console.log(verify.userId);
+  let gas = await method.estimateGas({ from: verify.address });
+  await method.send({ from: verify.address, gas });
+  let password = await getVerifierLogin(verify.userId);
+  console.log({ password });
+  let response = password.password == data.newPassword;
+  console.log({ response });
+  res.send(response);
+});
 module.exports = router;

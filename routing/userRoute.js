@@ -92,6 +92,7 @@ router.post('/addDocuments', async (req, res) => {
     console.log('success');
   } catch (err) {
     console.log({ err });
+    return res.send(false);
   }
   res.send(true);
 });
@@ -125,7 +126,7 @@ router.post('/login', async (req, res) => {
         isValid: true,
         token: generateToken(tempData),
         userId: temp.userId,
-        isAdmin:false
+        isAdmin: false,
       });
     } else {
       return res.send({ isValid: false, msg: 'password mismatch' });
@@ -154,11 +155,11 @@ router.get('/viewProcessStatus', async (req, res) => {
 
   let verify = verifyToken(header);
   let Id = req.query.id;
-    let method = await API.methods.fetchUserProcess(verify.userId).call();
-    console.log(method);
-    if(method[0][2]!=verify.userId){
-            return res.send(null);
-    }
+  let method = await API.methods.fetchUserProcess(verify.userId).call();
+  console.log(method);
+  if (method[0][2] != verify.userId) {
+    return res.send(null);
+  }
 
   let data = {};
   console.log({ verify });

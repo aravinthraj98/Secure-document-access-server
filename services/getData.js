@@ -45,5 +45,6 @@ module.exports = {
   getDeparmentPriority,
   getUserLogin,
   getVerifierLogin,
-  returnPriority
+  returnPriority,
+  getAllPriority
 };

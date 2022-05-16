@@ -103,7 +103,13 @@ app.use('/admin', adminRoute);
 
 app.listen(4000, () => {
   getAllAccounts().then(async () => {
-    const status = await addNewEmployee('OA1000', 'owner', 'aravinth', owner);
+    const status = await addNewEmployee(
+      'OA1000',
+      'owner',
+      'aravinth',
+      false,
+      owner
+    );
     allDepartment = await getAllDepartment();
   });
 

@@ -18,16 +18,16 @@ function getProcessId() {
   return Id;
 }
 
-async function addNewEmployee(id, deptName, password, fromAddress) {
+async function addNewEmployee(id, deptName, password, isLead, fromAddress) {
   try {
     let gas = await API.methods
-      .addNewDEmployee(id, password, deptName)
+      .addNewEmployee(id, password, deptName, isLead)
       .estimateGas({
         from: fromAddress,
       });
 
     await API.methods
-      .addNewDEmployee(id, password, deptName)
+      .addNewEmployee(id, password, deptName, isLead)
       .send({ from: fromAddress, gas: gas });
   } catch (err) {
     return false;
@@ -47,7 +47,6 @@ async function setPriority(allDepartment) {
   }
   await API.methods.setPriority(allDepartment, priority);
 }
-
 
 async function getVerifierLogin() {
   return { password: '2345', deptName: 'NHAI' };

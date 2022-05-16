@@ -47,6 +47,24 @@ const ABI = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: 'newPriority',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'deptName',
+        type: 'string',
+      },
+    ],
+    name: 'addNewDept',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'string',
         name: 'id',
         type: 'string',
@@ -61,8 +79,13 @@ const ABI = [
         name: 'deptName',
         type: 'string',
       },
+      {
+        internalType: 'bool',
+        name: 'isLead',
+        type: 'bool',
+      },
     ],
-    name: 'addNewDEmployee',
+    name: 'addNewEmployee',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -120,6 +143,35 @@ const ABI = [
         type: 'string',
       },
       {
+        internalType: 'string',
+        name: 'password',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'newPassword',
+        type: 'string',
+      },
+    ],
+    name: 'changePassword',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'userId',
+        type: 'string',
+      },
+      {
         components: [
           {
             internalType: 'string',
@@ -160,6 +212,11 @@ const ABI = [
             internalType: 'string',
             name: 'deptName',
             type: 'string',
+          },
+          {
+            internalType: 'bool',
+            name: 'isLead',
+            type: 'bool',
           },
         ],
         internalType: 'struct Approval.verifierDetail',
@@ -216,6 +273,19 @@ const ABI = [
     name: 'updateDepartmentKeys',
     outputs: [],
     stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: 'newPriority',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'updatePriority',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -595,6 +665,11 @@ const ABI = [
             name: 'deptName',
             type: 'string',
           },
+          {
+            internalType: 'bool',
+            name: 'isLead',
+            type: 'bool',
+          },
         ],
         internalType: 'struct Approval.verifierDetail',
         name: '',
@@ -741,6 +816,11 @@ const ABI = [
         internalType: 'string',
         name: 'deptName',
         type: 'string',
+      },
+      {
+        internalType: 'bool',
+        name: 'isLead',
+        type: 'bool',
       },
     ],
     stateMutability: 'view',
