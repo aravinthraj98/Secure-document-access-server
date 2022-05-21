@@ -64,9 +64,10 @@ router.get('/myProcess', async (req, res) => {
   console.log({ verify });
   try {
     let method = await API.methods.fetchMyProcess(verify.deptName).call();
+    let myPriority = await getDeparmentPriority(verify.deptName);
 
-    console.log({ method });
-    res.send({ method });
+    console.log({ method, myPriority });
+    res.send({ method, myPriority });
   } catch (err) {
     console.log(err);
     res.send(null);
@@ -183,7 +184,7 @@ router.post('/updateProcess', async (req, res) => {
   );
   let gas = await method.estimateGas({ from: verify.address });
   console.log({ gas });
-  // await method.send({ from: verify.address, gas: gas });
+  await method.send({ from: verify.address, gas: gas });
 
   res.send('ss');
 });
@@ -235,5 +236,15 @@ router.post('/changePassword', async (req, res) => {
   let response = password.password == data.newPassword;
   console.log({ response });
   res.send(response);
+});
+
+router.get('/getProcessed', async (req, res) => {
+  let header = req.headers.authorization;
+  let verify = verifyToken(header);
+
+  console.log({ verify });
+  let body = await API.methods.getFinishedProcess(verify.deptName).call();
+  console.log({ body });
+  res.send('number');
 });
 module.exports = router;

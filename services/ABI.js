@@ -129,6 +129,11 @@ const ABI = [
         name: 'owner',
         type: 'string',
       },
+      {
+        internalType: 'uint256',
+        name: 'currentPriority',
+        type: 'uint256',
+      },
     ],
     name: 'addNewProcess',
     outputs: [],
@@ -541,6 +546,11 @@ const ABI = [
             name: 'owner',
             type: 'string',
           },
+          {
+            internalType: 'uint256',
+            name: 'currentPriority',
+            type: 'uint256',
+          },
         ],
         internalType: 'struct Approval.Process[]',
         name: '',
@@ -577,10 +587,76 @@ const ABI = [
             name: 'owner',
             type: 'string',
           },
+          {
+            internalType: 'uint256',
+            name: 'currentPriority',
+            type: 'uint256',
+          },
         ],
         internalType: 'struct Approval.Process[]',
         name: '',
         type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'finishedProcess',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'string',
+            name: 'approvalDept',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'openedTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'closedTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'approvedStatus',
+            type: 'bool',
+          },
+          {
+            internalType: 'string',
+            name: 'description',
+            type: 'string',
+          },
+          {
+            internalType: 'address',
+            name: 'transactedPerson',
+            type: 'address',
+          },
+        ],
+        internalType: 'struct Approval.Status',
+        name: 'detail',
+        type: 'tuple',
+      },
+      {
+        internalType: 'string',
+        name: 'processId',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
@@ -607,6 +683,69 @@ const ABI = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'deptName',
+        type: 'string',
+      },
+    ],
+    name: 'getFinishedProcess',
+    outputs: [
+      {
+        components: [
+          {
+            components: [
+              {
+                internalType: 'string',
+                name: 'approvalDept',
+                type: 'string',
+              },
+              {
+                internalType: 'uint256',
+                name: 'openedTime',
+                type: 'uint256',
+              },
+              {
+                internalType: 'uint256',
+                name: 'closedTime',
+                type: 'uint256',
+              },
+              {
+                internalType: 'bool',
+                name: 'approvedStatus',
+                type: 'bool',
+              },
+              {
+                internalType: 'string',
+                name: 'description',
+                type: 'string',
+              },
+              {
+                internalType: 'address',
+                name: 'transactedPerson',
+                type: 'address',
+              },
+            ],
+            internalType: 'struct Approval.Status',
+            name: 'detail',
+            type: 'tuple',
+          },
+          {
+            internalType: 'string',
+            name: 'processId',
+            type: 'string',
+          },
+        ],
+        internalType: 'struct Approval.FinishedProcess[]',
+        name: '',
+        type: 'tuple[]',
       },
     ],
     stateMutability: 'view',
@@ -722,6 +861,11 @@ const ABI = [
         name: 'owner',
         type: 'string',
       },
+      {
+        internalType: 'uint256',
+        name: 'currentPriority',
+        type: 'uint256',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -792,6 +936,11 @@ const ABI = [
         internalType: 'string',
         name: 'owner',
         type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'currentPriority',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

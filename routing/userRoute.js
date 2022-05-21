@@ -55,13 +55,7 @@ router.post('/addDocuments', async (req, res) => {
   console.log({ data });
   try {
     console.log('coming here 0');
-    let methods = API.methods.addNewProcess(
-      processId,
-      data.fullAddress,
-      data.description,
-      data.docSrc,
-      verify.userId
-    );
+
     console.log('coming here');
 
     let deptKeyDetails = [];
@@ -76,6 +70,14 @@ router.post('/addDocuments', async (req, res) => {
       deptKeyDetails.push(newData);
     }
     console.log({ deptKeyDetails });
+    let methods = API.methods.addNewProcess(
+      processId,
+      data.fullAddress,
+      data.description,
+      data.docSrc,
+      verify.userId,
+      minimumPriority
+    );
     let methods1 = API.methods.addAccessDetails(
       processId,
       deptKeyDetails,
