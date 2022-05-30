@@ -9,6 +9,7 @@ const {
   getAllPriority,
 } = require('../services/getData');
 const { generateToken, verifyToken } = require('../services/jwtServices');
+const { sendMail } = require('../services/MailService');
 const {
   API,
   returnAllAccounts,
@@ -36,6 +37,13 @@ router.post('/addEmployee', async (req, res) => {
       data.password,
       data.isLead,
       account[accountCount]
+    );
+    await sendMail(
+      data.email,
+      'account creation',
+      `Account creation at ${data.deptName} and ${'id is s ' + Id}\n password:${
+        data.password
+      } please change the password..`
     );
     if (status == false) {
       throw new Error('Internal server error');
@@ -75,7 +83,9 @@ router.get('/myProcess', async (req, res) => {
 });
 router.post('/login', async (req, res) => {
   let temp = req.body;
+  console.log({ temp });
   let data = await getVerifierLogin(temp.userId);
+
   let account = await returnAllAccounts();
   console.log({ admin: data });
   if (data) {
@@ -114,7 +124,7 @@ router.get('/verifyProcess', async (req, res) => {
 
   let data = {};
   console.log({ verify });
-  let accessData = await API.methods.fetchAccess(Id).call();
+  let accessData = await API.methods.fetchAccess(Id, verify.deptName).call();
   let fetchData = await API.methods.fetchDocument(Id).call();
   let isAccess = false;
   console.log({ accessData: accessData });
@@ -151,7 +161,10 @@ router.post('/updateProcess', async (req, res) => {
   let verify = verifyToken(header);
   console.log({ verify });
   data.status.transactedPerson = verify.address;
-  let accessData = await API.methods.fetchAccess(data.processId).call();
+  data.status.verifierId = verify.userId;
+  let accessData = await API.methods
+    .fetchAccess(data.processId, verify.deptName)
+    .call();
   let minimumPriority = 99;
 
   if (data.status.approvedStatus == 'true') {
@@ -176,6 +189,7 @@ router.post('/updateProcess', async (req, res) => {
   }
   console.log({ minimumPriority });
   data.status.approvalDept = verify.deptName;
+
   console.log({ dept: data.status });
   let method = API.methods.updateProcessStatus(
     data.status,
@@ -245,6 +259,16 @@ router.get('/getProcessed', async (req, res) => {
   console.log({ verify });
   let body = await API.methods.getFinishedProcess(verify.deptName).call();
   console.log({ body });
-  res.send('number');
+  res.send(body);
+});
+
+router.post('/addDepartment', async (req, res) => {
+  let header = req.headers.authorization;
+  let data = req.body;
+  let verify = verifyToken(header);
+  let method = API.methods.addNewDept(data.priority, data.deptName);
+  let gas = await method.estimateGas({ from: verify.address });
+  await method.send({ from: verify.address, gas });
+  res.send(true);
 });
 module.exports = router;

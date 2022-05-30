@@ -327,6 +327,11 @@ const ABI = [
             name: 'transactedPerson',
             type: 'address',
           },
+          {
+            internalType: 'string',
+            name: 'verifierId',
+            type: 'string',
+          },
         ],
         internalType: 'struct Approval.Status',
         name: 'detail',
@@ -398,6 +403,11 @@ const ABI = [
         name: 'processId',
         type: 'string',
       },
+      {
+        internalType: 'string',
+        name: 'deptName',
+        type: 'string',
+      },
     ],
     name: 'fetchAccess',
     outputs: [
@@ -451,6 +461,11 @@ const ABI = [
                 internalType: 'address',
                 name: 'transactedPerson',
                 type: 'address',
+              },
+              {
+                internalType: 'string',
+                name: 'verifierId',
+                type: 'string',
               },
             ],
             internalType: 'struct Approval.Status[]',
@@ -648,6 +663,11 @@ const ABI = [
             name: 'transactedPerson',
             type: 'address',
           },
+          {
+            internalType: 'string',
+            name: 'verifierId',
+            type: 'string',
+          },
         ],
         internalType: 'struct Approval.Status',
         name: 'detail',
@@ -732,6 +752,11 @@ const ABI = [
                 name: 'transactedPerson',
                 type: 'address',
               },
+              {
+                internalType: 'string',
+                name: 'verifierId',
+                type: 'string',
+              },
             ],
             internalType: 'struct Approval.Status',
             name: 'detail',
@@ -746,6 +771,25 @@ const ABI = [
         internalType: 'struct Approval.FinishedProcess[]',
         name: '',
         type: 'tuple[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'processId',
+        type: 'string',
+      },
+    ],
+    name: 'getProcessPriority',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -864,6 +908,25 @@ const ABI = [
       {
         internalType: 'uint256',
         name: 'currentPriority',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    name: 'processPriority',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
         type: 'uint256',
       },
     ],

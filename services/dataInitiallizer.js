@@ -5,15 +5,15 @@ let processCount = 0;
 let lastDate = new Date().getMilliseconds();
 function getProcessId() {
   let date = new Date();
-  let Id = 'p' + date.getDate() + (date.getMonth() + 1) + date.getFullYear();
+  let Id = 'p' + Date.now();
   let milli = 24 * 60 * 60 * 1000;
-  if (lastDate + milli <= new Date().getMilliseconds()) {
-    processCount = 0;
-    lastDate = new Date().getMilliseconds();
-  } else {
-    processCount++;
-  }
-  Id = Id + processCount;
+  // if (lastDate + milli <= new Date().getMilliseconds()) {
+  //   processCount = 0;
+  //   lastDate = new Date().getMilliseconds();
+  // } else {
+  //   processCount++;
+  // }
+  // Id = Id + processCount;
   console.log({ Id });
   return Id;
 }
@@ -30,6 +30,7 @@ async function addNewEmployee(id, deptName, password, isLead, fromAddress) {
       .addNewEmployee(id, password, deptName, isLead)
       .send({ from: fromAddress, gas: gas });
   } catch (err) {
+    console.log({ err });
     return false;
   }
 

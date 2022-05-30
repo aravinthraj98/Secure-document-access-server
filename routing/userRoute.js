@@ -110,6 +110,7 @@ router.post('/login', async (req, res) => {
   let temp = req.body;
   let data = await getUserLogin(temp.userId);
   let account = await returnAllAccounts();
+  console.log({ data });
 
   if (data) {
     if (data.password == temp.password) {
@@ -165,7 +166,8 @@ router.get('/viewProcessStatus', async (req, res) => {
 
   let data = {};
   console.log({ verify });
-  let accessData = await API.methods.fetchAccess(Id).call();
+  
+  let accessData = await API.methods.fetchAccess(Id, 'docOwner').call();
   let fetchData = await API.methods.fetchDocument(Id).call();
   data = {
     ...accessData,

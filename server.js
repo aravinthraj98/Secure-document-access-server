@@ -12,7 +12,8 @@ const adminRoute = require('./routing/adminRoute');
 const { getAllAccounts, API } = require('./services/Web3Initializer');
 const { addNewEmployee, setPriority } = require('./services/dataInitiallizer');
 const { getAllDepartment } = require('./services/getData');
-const owner = '0x45034bc348ea4963d68101dd0925e110b7f115d6';
+const { sendMail } = require('./services/MailService');
+const owner = '0x76816B30aE4A29adB009857a861AC4739818C416';
 let allDepartment = [];
 let deptPriority;
 let sampleData = {
@@ -112,6 +113,7 @@ app.listen(4000, () => {
     );
     allDepartment = await getAllDepartment();
   });
+  sendMail('aravinthraj1972@gmail.com', 'dd', 'dd');
 
   console.log('http://localhost:4000');
 });
