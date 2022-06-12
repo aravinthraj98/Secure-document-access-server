@@ -1,35 +1,44 @@
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
-let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'tempemail2905@gmail.com',
-    pass: '@Tempemail1',
-  },
-});
+// let transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: 'tempemail2905@gmail.com',
+//     pass: '@Tempemail1',
+//   },
+// });
 
-let mailOptions = {
-  from: 'tempemail2905@gmail.com',
-  to: '',
-  subject: '',
-  text: '',
-};
+// let mailOptions = {
+//   from: 'tempemail2905@gmail.com',
+//   to: '',
+//   subject: '',
+//   text: '',
+// };
+
+// const smtp = require('emailjs');
+
+// const client = new SMTPClient({
+//   user: 'tempemail2905@gmail.com',
+//   password: '@Tempemail1',
+//   host: 'tempemail2905@gmail.com',
+//   ssl: true,
+// });
+
+// send the message and get a callback with an error or details of the message that was sent
 
 async function sendMail(receiver, subject, text) {
-  //   mailOptions.to = receiver;
-  //   mailOptions.subject = subject;
-  //   mailOptions.text = text;
-  //   await new Promise((resolve, reject) => {
-  //     transporter.sendMail(mailOptions, (error, info) => {
-  //       if (error) {
-  //         reject();
-  //         console.log(error);
-  //       } else {
-  //         resolve();
-  //         console.log('success');
-  //       }
-  //     });
-  //   });
+  // client.send(
+  //   {
+  //     text: text,
+  //     from: 'you <username@your-email.com>',
+  //     to: 'aravinthraj1972@gmail.com',
+  //     cc: 'else <else@your-email.com>',
+  //     subject: 'testing emailjs',
+  //   },
+  //   (err, message) => {
+  //     console.log(err || message);
+  //   }
+  // );
 }
 
 module.exports = { sendMail };

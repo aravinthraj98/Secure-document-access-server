@@ -45,6 +45,7 @@ router.get('mydocuments', (req, res) => {
 });
 router.post('/addDocuments', async (req, res) => {
   let processId = getProcessId();
+
   let header = req.headers.authorization;
   console.log({ header });
   let verify = verifyToken(header);
@@ -52,6 +53,10 @@ router.post('/addDocuments', async (req, res) => {
   if (!verify.userId) return res.send(false);
 
   let data = req.body;
+  if (data.isUpdate) {
+    processId = data.processId;
+    console.log({ processId });
+  }
   console.log({ data });
   try {
     console.log('coming here 0');
@@ -166,7 +171,7 @@ router.get('/viewProcessStatus', async (req, res) => {
 
   let data = {};
   console.log({ verify });
-  
+
   let accessData = await API.methods.fetchAccess(Id, 'docOwner').call();
   let fetchData = await API.methods.fetchDocument(Id).call();
   data = {

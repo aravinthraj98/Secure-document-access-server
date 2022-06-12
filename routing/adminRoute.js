@@ -124,34 +124,38 @@ router.get('/verifyProcess', async (req, res) => {
 
   let data = {};
   console.log({ verify });
-  let accessData = await API.methods.fetchAccess(Id, verify.deptName).call();
-  let fetchData = await API.methods.fetchDocument(Id).call();
-  let isAccess = false;
-  console.log({ accessData: accessData });
-  for (let i in accessData.approvalDept) {
-    if (accessData.approvalDept[i][0] == verify.deptName) {
-      console.log(verify.deptName);
+  try {
+    let accessData = await API.methods.fetchAccess(Id, verify.deptName).call();
+    let fetchData = await API.methods.fetchDocument(Id).call();
+    let isAccess = false;
+    console.log({ accessData: accessData });
+    for (let i in accessData.approvalDept) {
+      if (accessData.approvalDept[i][0] == verify.deptName) {
+        console.log(verify.deptName);
 
-      if (
-        Number(accessData.currentPriority) <
-        getDeparmentPriority(verify.deptName)
-      ) {
-        console.log(accessData.approvalDept[i]);
-        isAccess = false;
-      } else {
-        isAccess = true;
+        if (
+          Number(accessData.currentPriority) <
+          getDeparmentPriority(verify.deptName)
+        ) {
+          console.log(accessData.approvalDept[i]);
+          isAccess = false;
+        } else {
+          isAccess = true;
+        }
       }
     }
-  }
 
-  data = {
-    ...accessData,
-    ...fetchData,
-  };
-  if (isAccess == false) {
+    data = {
+      ...accessData,
+      ...fetchData,
+    };
+    if (isAccess == false) {
+      return res.send('No access');
+    }
+    res.send(data);
+  } catch (err) {
     return res.send('No access');
   }
-  res.send(data);
 });
 
 router.post('/updateProcess', async (req, res) => {
@@ -160,12 +164,15 @@ router.post('/updateProcess', async (req, res) => {
 
   let verify = verifyToken(header);
   console.log({ verify });
+  console.log({ status: data.status });
   data.status.transactedPerson = verify.address;
   data.status.verifierId = verify.userId;
+  console.log({ status: data.status });
   let accessData = await API.methods
     .fetchAccess(data.processId, verify.deptName)
     .call();
   let minimumPriority = 99;
+  console.log({ approvedStatus: data.status.approvedStatus });
 
   if (data.status.approvedStatus == 'true') {
     console.log('approved status true');
@@ -189,8 +196,9 @@ router.post('/updateProcess', async (req, res) => {
   }
   console.log({ minimumPriority });
   data.status.approvalDept = verify.deptName;
-
+  data.status.approvedStatus = data.status.approvedStatus == 'true';
   console.log({ dept: data.status });
+
   let method = API.methods.updateProcessStatus(
     data.status,
     data.processId,

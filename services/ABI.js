@@ -47,6 +47,51 @@ const ABI = [
   {
     inputs: [
       {
+        internalType: 'string',
+        name: 'processId',
+        type: 'string',
+      },
+      {
+        components: [
+          {
+            internalType: 'string',
+            name: 'deptName',
+            type: 'string',
+          },
+          {
+            internalType: 'uint256',
+            name: 'priority',
+            type: 'uint256',
+          },
+        ],
+        internalType: 'struct Approval.DeptKeyDetails[]',
+        name: 'deptDetail',
+        type: 'tuple[]',
+      },
+      {
+        internalType: 'uint256',
+        name: 'currentPriority',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'owner',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+    ],
+    name: 'addEditAccessDetails',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: 'newPriority',
         type: 'uint256',
@@ -260,29 +305,6 @@ const ABI = [
   {
     inputs: [
       {
-        internalType: 'string[]',
-        name: 'dept',
-        type: 'string[]',
-      },
-      {
-        internalType: 'string[]',
-        name: 'publicKey',
-        type: 'string[]',
-      },
-      {
-        internalType: 'string[]',
-        name: 'privateKey',
-        type: 'string[]',
-      },
-    ],
-    name: 'updateDepartmentKeys',
-    outputs: [],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'uint256[]',
         name: 'newPriority',
         type: 'uint256[]',
@@ -351,30 +373,6 @@ const ABI = [
     name: 'updateProcessStatus',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    name: 'deptKeys',
-    outputs: [
-      {
-        internalType: 'string',
-        name: 'publicKey',
-        type: 'string',
-      },
-      {
-        internalType: 'string',
-        name: 'privateKey',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -476,6 +474,11 @@ const ABI = [
             internalType: 'uint256',
             name: 'currentPriority',
             type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'currentStatus',
+            type: 'string',
           },
         ],
         internalType: 'struct Approval.DocumentAccess',
@@ -857,19 +860,6 @@ const ABI = [
         internalType: 'struct Approval.verifierDetail',
         name: '',
         type: 'tuple',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'isKeyNeeded',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
       },
     ],
     stateMutability: 'view',
